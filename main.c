@@ -23,14 +23,15 @@ void inicializa_variables() {
 int main() {
     int salir=0;
     inicializa_variables();
-    entrar();
-    do {
-        while(partida_en_progreso==0) {
-            iniciar_sesion();
-        }
-        game_loop();
-        finalizar_partida();
-    } while(salir==0);
+//    entrar();
+    guardar_partida();
+//    do {
+//        while(partida_en_progreso==0) {
+//            iniciar_sesion();
+//        }
+//        game_loop();
+//        finalizar_partida();
+//    } while(salir==0);
     return 0;
 }
 

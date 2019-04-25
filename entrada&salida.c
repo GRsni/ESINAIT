@@ -8,7 +8,6 @@
  *
  */
 int contar_linea_fichero(char *nombre) {
-    printf("AQUI contar linea fichero %s\n", nombre);
     char aux=0;
     int cont=1;
     FILE *f;
@@ -124,37 +123,37 @@ void cargar_struct_jugadores() {
                 if(strcmp(linea,"\0")) {
                     token=strtok(linea,"/");
                     strcpy(jugadores[n].sobrenombre,token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     strcpy(jugadores[n].nombre,token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     jugadores[n].nivel=atoi(token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     jugadores[n].vida=atoi(token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     jugadores[n].escudo=atoi(token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     strcpy(jugadores[n].estado, token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     jugadores[n].cartera=atoi(token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     jugadores[n].np=atoi(token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     jugadores[n].ng=atoi(token);
-
+printf("%s\n", token);
                     token=strtok(NULL,"/");
                     jugadores[n].admin=strcmp(token, "ADM")==0?1:0;
-
+printf("%s\n", token);
                     token=strtok(NULL,"\n");
                     strcpy(jugadores[n].contrasena,token);
-
+printf("%s\n", token);
                     jugadores[n].obj_seleccionado=-1;
 
                     jugadores[n].x=LONG_MAX;
@@ -444,29 +443,15 @@ void cargar_struct_posiciones() {
 
 void mostrar() {
     int i, j;
-    int Q=contar_linea_fichero("usuarios.txt");
-    for(i=0; i<Q; i++) {
+    for(i=0; i<total_jugadores; i++) {
         printf("nick: %s\n",jugadores[i].sobrenombre);
-        fflush(stdin);
-
         printf("nombre: %s\n",jugadores[i].nombre);
-        fflush(stdin);
-
         printf("nivel: %d\n",jugadores[i].nivel);
-        fflush(stdin);
-
         printf("vida: %d\n",jugadores[i].vida);
-        fflush(stdin);
-
         printf("contrasena: %s\n",jugadores[i].contrasena);
-        fflush(stdin);
-
         printf("admin: %d\n", jugadores[i].admin);
-        fflush(stdin);
-
         printf("Estado: %s\n", jugadores[i].estado);
-        fflush(stdin);
-
+        printf("Cartera: %d\n", jugadores[i].cartera);
         for(j=0; j<jugadores[i].num_objetos; j++) {
             printf("%s, ", jugadores[i].mochila[j].identificadorobjeto);
             printf("%s, ", jugadores[i].mochila[j].descripcion);
@@ -481,6 +466,7 @@ void mostrar() {
     for(i=0; i<total_objetos; i++) {
         printf("%s/%s daño %d\n", objetos[i].identificadorobjeto, objetos[i].descripcion, objetos[i].dano);
     }
+    puts("\nINFORMACION SISTEMA");
     printf("tamaño mapa: %f\n", objeto_juego->radio);
     printf("rango_arma_base: %f\n", objeto_juego->rango_arma_base);
     puts("\nPosiciones tormenta:");
@@ -588,7 +574,6 @@ void guardar_usuarios() {
             fprintf(f,"%i",jugadores[i].vida);
             fputc('/',f);
             fprintf(f,"%i",jugadores[i].escudo);
-            fputc('/',f);;
             fputc('/',f);
             fwrite(jugadores[i].estado,1,strlen(jugadores[i].estado),f);
             fputc('/',f);
@@ -607,7 +592,9 @@ void guardar_usuarios() {
             }
 
             fwrite(jugadores[i].contrasena,1,strlen(jugadores[i].contrasena),f);
-            fputc('\n',f);
+            if(i<N-1) {
+                fputc('\n',f);
+            }
 
         }
 
@@ -651,7 +638,6 @@ void guardar_configuracion() {
     fprintf(f,"%i",objeto_juego[i].numero_partidas_por_nivel);
     fputc('/',f);
     fprintf(f,"%i",objeto_juego[i].numero_acciones_por_turno);
-    fputc('\n',f);
 
     fclose(f);
 }
@@ -668,30 +654,40 @@ void guardar_mochila() {
 
 
     FILE *f;
-    int j=0,i=0,N=0,M=0;
-    N=total_jugadores;
+    int j=0,i=0, num_jug_con_obj=0;
 
-    f=fopen("mochila.txt","w");
+    f=fopen("mochila.txt","w+");
 
     if(f==NULL) {
 
         printf("\nHa ocurrido un error al abrir el fichero\n");
         exit(1);
     }
-
-    for(i=0; i<N; i++) {
-        M=jugadores[i].num_objetos;
-        for(j=0; j<M; j++) {
-            fwrite(jugadores[i].sobrenombre,1,strlen(jugadores[i].sobrenombre),f);
-            fputc('/',f);
-            fwrite(jugadores[i].mochila[j].identificadorobjeto,1,strlen(jugadores[i].mochila[j].identificadorobjeto),f);
-            fputc('/',f);
-            fprintf(f,"%i",jugadores[i].mochila[j].cantidad);
-            fputc('\n',f);
+    for(i=0; i<total_jugadores; i++) {
+        if(jugadores[i].num_objetos>0) {
+            num_jug_con_obj++;
+        }
+    }
+    for(i=0; i<total_jugadores; i++) {
+        if(jugadores[i].num_objetos>0) {
+                num_jug_con_obj--;
+            for(j=0; j<jugadores[i].num_objetos; j++) {
+                fwrite(jugadores[i].sobrenombre,1,strlen(jugadores[i].sobrenombre),f);
+                fputc('/',f);
+                fwrite(jugadores[i].mochila[j].identificadorobjeto,1,strlen(jugadores[i].mochila[j].identificadorobjeto),f);
+                fputc('/',f);
+                fprintf(f,"%i",jugadores[i].mochila[j].cantidad);
+                if(num_jug_con_obj!=0){
+                    fputc('\n', f);
+                }else{
+                    if(j<jugadores[i].num_objetos-1){
+                        fputc('\n', f);
+                    }
+                }
+            }
         }
 
     }
-
     fclose(f);
 }
 
@@ -727,8 +723,9 @@ void guardar_tormenta() {
         fprintf(f,"%f",objeto_juego->tormentas[i].diametro);
         fputc('/',f);
         fprintf(f,"%i",objeto_juego->tormentas[i].tiempo);
-        fputc('\n',f);
-
+        if(i<N-1) {
+            fputc('\n',f);
+        }
     }
 
     fclose(f);
@@ -771,8 +768,9 @@ void guardar_objetos() {
         fprintf(f,"%f",objetos[i].alcance);
         fputc('/',f);
         fprintf(f,"%i",objetos[i].dano);
-        fputc('\n',f);
-
+        if(i<N-1) {
+            fputc('\n',f);
+        }
     }
 
     fclose(f);

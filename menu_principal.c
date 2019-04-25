@@ -17,10 +17,7 @@ void entrar() {
 
     printf("\tBienvenido a ESINAIT \n 1.Entrar en el sistema\n 0.Salir del sistema\n");
     scanf("%d",&d);
-
-    if(d==1) {
-        iniciar_sesion();
-    } else {
+    if(d==0){
         exit(1);
     }
 

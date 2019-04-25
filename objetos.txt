@@ -1,10 +1,10 @@
-PTL01/Pistola/arma/10/60/10
-PTL02/Pistola/arma/25/75/25
-PTL05/Pistola/arma/100/500/2000
-ESC01/Escopeta/arma/30/90/30
-ESC02/Escopeta/arma/60/50/100
-BLL01/Ballesta/arma/68/120/70
-BOT01/Botiquin/accesorio/50/0/50
-POC01/Pocima/accesorio/90/0/50
-VEN01/Venda/accesorio/60/0/25
-MASH01/Skin Marshmello/150/0/0/
+PTL01/Pistola/arma/10/60.000000/10
+PTL02/Pistola/arma/25/75.000000/25
+PTL05/Pistola/arma/100/500.000000/2000
+ESC01/Escopeta/arma/30/90.000000/30
+ESC02/Escopeta/arma/60/50.000000/100
+BLL01/Ballesta/arma/68/120.000000/70
+BOT01/Botiquin/accesorio/50/0.000000/50
+POC01/Pocima/accesorio/90/0.000000/50
+VEN01/Venda/accesorio/60/0.000000/25
+MASH01/Skin Marshmello/150/0/0.000000/0
